@@ -130,3 +130,7 @@ all work correctly provided you use them consistently.
 
 [ ] Support tabs and/or smart tabs (verify they're being used correctly?  Throw an error if not?)
 -->
+
+### Questions or Bugs?
+
+File an issue on Github: https://github.com/cspotcode/outdent/issues
