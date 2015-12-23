@@ -91,7 +91,7 @@ function concatStringsAndValues(strings, values) {
  * @param options
  * @return {outdent}
  */
-function makeInstance(options) {
+function createInstance(options) {
     const cache = new createWeakMap();
 
     const ret = function outdent(stringsOrOptions, ...values) {
@@ -109,14 +109,14 @@ function makeInstance(options) {
             return rendered;
         } else {
             // Create and return a new instance of outdent with the given options
-            return makeInstance(extend(extend({}, options), stringsOrOptions));
+            return createInstance(extend(extend({}, options), stringsOrOptions));
         }
     };
 
     return ret;
 }
 
-const outdent = makeInstance({
+const outdent = createInstance({
     trimLeadingNewline: true,
     trimTrailingNewline: true
 });
