@@ -1,0 +1,7 @@
+.travis.yml
+.idea
+.gitignore
+.npmignore
+test
+.babelrc
+.editorconfig
