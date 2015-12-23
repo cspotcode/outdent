@@ -1,4 +1,20 @@
-const instances = new WeakSet();
+// In the absence of a WeakSet or WeakMap implementation, don't break, but don't cache either.
+function noop() {}
+function createWeakMap() {
+    if(typeof WeakMap !== 'undefined') {
+        return new WeakMap();
+    } else {
+        return fakeSetOrMap();
+    }
+}
+function fakeSetOrMap() {
+    return {
+        add: noop,
+        delete: noop,
+        set: noop,
+        has: function() {return false;}
+    };
+}
 
 // Safe hasOwnProperty
 const hop = Object.prototype.hasOwnProperty;
@@ -76,7 +92,7 @@ function concatStringsAndValues(strings, values) {
  * @return {outdent}
  */
 function makeInstance(options) {
-    const cache = new WeakMap();
+    const cache = new createWeakMap();
 
     const ret = function outdent(stringsOrOptions, ...values) {
         if(has(stringsOrOptions, 'raw') && has(stringsOrOptions, 'length')) {
@@ -97,8 +113,6 @@ function makeInstance(options) {
         }
     };
 
-    instances.add(ret);
-
     return ret;
 }
 
@@ -106,8 +120,6 @@ const outdent = makeInstance({
     trimLeadingNewline: true,
     trimTrailingNewline: true
 });
-
-instances.add(outdent);
 
 // ES6
 outdent.default = outdent;
