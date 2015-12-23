@@ -2,7 +2,7 @@
 
 ## Removes leading indentation from ES6 template strings
 
-[![Build Status](https://travis-ci.org/Florob/RustyXML.svg?branch=master)](https://travis-ci.org/Florob/RustyXML)
+[![Build Status](https://travis-ci.org/cspotcode/outdent.svg?branch=master)](https://travis-ci.org/cspotcode/outdent)
 
 ES6 template strings are great, but they preserve everything between the backticks, including leading spaces.
 Sometimes I want to indent my template literals to make my code more readable without including all those spaces in the
