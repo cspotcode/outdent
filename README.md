@@ -41,7 +41,7 @@ var markdown = '# My Markdown File\n' +
                '    console.log("hello world!");'
 ```
 
-You can pass options to outdent to control its behavior.  They are explained in [Options](#Options).
+You can pass options to outdent to control its behavior.  They are explained in [Options](#options).
 
 ```javascript
 const output = outdent({trimLeadingNewline: false, trimTrailingNewline: false})`
