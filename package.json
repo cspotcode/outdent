@@ -7,7 +7,7 @@
   "scripts": {
     "build": "babel src --out-dir lib",
     "test": "npm run-script build ; mocha",
-    "prepublish": "echo TODO implement me"
+    "prepublish": "npm test"
   },
   "repository": {
     "type": "git",
