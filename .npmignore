@@ -1,5 +1,6 @@
 .travis.yml
 .idea
+.vscode
 .gitignore
 .npmignore
 test
