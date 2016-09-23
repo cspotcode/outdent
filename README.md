@@ -147,6 +147,10 @@ Spaces and tabs are treated identically.  outdent does not verify that you are u
 are all treated as a single character for the purpose of removing indentation.  Spaces, tabs, and smart tabs should
 all work correctly provided you use them consistently.
 
+### TypeScript declarations
+
+This module includes TypeScript type declarations so you will get code completion and error-checking without installing anything else.
+
 <!--
 ### TODOs
 

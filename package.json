@@ -4,9 +4,10 @@
   "description": "Remove leading indentation from ES6 template literals.",
   "main": "lib/index.js",
   "jsnext:main": "src/index.es",
+  "typings": "src/index.d.ts",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "test": "npm run-script build ; mocha",
+    "test": "npm run-script build && mocha && tsc -p test/ts",
     "prepublish": "npm test"
   },
   "repository": {
@@ -35,6 +36,7 @@
     "babel-register": "^6.3.13",
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
-    "source-map-support": "^0.4.0"
+    "source-map-support": "^0.4.0",
+    "typescript": "^2.0.3"
   }
 }

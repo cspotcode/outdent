@@ -123,7 +123,9 @@ const outdent = createInstance({
 
 // ES6
 outdent.default = outdent;
+outdent.outdent = outdent;
 outdent.__esModule = true;
 exports.default = outdent;
+exports.outdent = outdent;
 exports.__esModule = true;
 module.exports = outdent;
