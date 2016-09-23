@@ -6,9 +6,10 @@
   "jsnext:main": "src/index.es",
   "typings": "src/index.d.ts",
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "clean": "rm -rf node_modules && rm -rf bin",
+    "build": "babel src -d lib",
     "test": "npm run-script build && mocha && tsc -p test/ts",
-    "prepublish": "npm test"
+    "prepublish": "if [ \"$NPM_SKIP_PREPUBLISH\" != \"1\" ]; then ( echo Cleaning and installing && npm run-script clean && NPM_SKIP_PREPUBLISH=1 npm install && npm test ) ; else echo skipping recursive prepublish ; fi"
   },
   "repository": {
     "type": "git",
