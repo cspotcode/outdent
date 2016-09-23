@@ -130,4 +130,17 @@ describe('outdent', () => {
         `).to.equal('Hi\n');
     });
 
+    [
+        ['Unix', '\n'],
+        ['Windows', '\r\n'],
+        ['Mac', '\r']
+    ].forEach(([type, terminator]) => {
+        it(`Handles ${type} newlines`, () => {
+            const strings = ['\n    Hello\n    world\n'.replace(/\n/g, terminator)];
+            const expected = 'Hello\nworld'.replace(/\n/g, terminator);
+            strings.raw = strings;
+            expect(outdent(strings)).to.equal(expected);
+        });
+    });
+
 });
