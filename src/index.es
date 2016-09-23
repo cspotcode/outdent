@@ -109,7 +109,7 @@ function createInstance(options) {
             return rendered;
         } else {
             // Create and return a new instance of outdent with the given options
-            return createInstance(extend(extend({}, options), stringsOrOptions));
+            return createInstance(extend(extend({}, options), stringsOrOptions || {}));
         }
     };
 
