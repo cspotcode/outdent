@@ -36,9 +36,9 @@ As a Javascript string:
 ```javascript
 var markdown = '# My Markdown File\n' +
                '\n' +
-               'Here is some indented code:'
+               'Here is some indented code:' +
                '\n' +
-               '    console.log("hello world!");'
+               '    console.log("hello world!");';
 ```
 
 You can pass options to outdent to control its behavior.  They are explained in [Options](#options).
@@ -112,7 +112,7 @@ var odRaw = outdent({pass: true});
 function query(barVal) {
     return prepareSql(...odRaw`
         SELECT * from foo where bar = ${barVal}
-    `);
+    `)
 }
 ```
 
