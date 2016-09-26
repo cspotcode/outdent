@@ -34,26 +34,31 @@ function extend(target, source) {
 
 const reLeadingNewline = /^[ \t]*(?:\r\n|\r|\n)/;
 const reTrailingNewline = /(?:\r\n|\r|\n)[ \t]*$/;
+const reStartsWithNewlineOrIsEmpty = /^(?:[\r\n]|$)/;
+const reDetectIndentation = /(\r\n|\r|\n)([ \t]*)(?:[^ \t\r\n]|$)/;
+const reOnlyWhitespaceWithAtLeastOneNewline = /^[ \t]*[\r\n][ \t\r\n]*$/;
 
 function _outdent(strings, values, outdentInstance, options) {
     // If first interpolated value is a reference to outdent,
     // determine indentation level from the indentation of the interpolated value.
-    let indentationLevel;
-    let leadingTrim;
-    let firstStringIndex = 0;
+    let indentationLevel = 0;
 
-    const match = strings[0].match(/(\r\n|\r|\n)([ \t]*)(?:[^ \t\r\n]|$)/);
-    if(!match) throw new Error('TODO');
-    leadingTrim = match.index + match[1].length;
-    indentationLevel = match[2].length;
+    const match = strings[0].match(reDetectIndentation);
+    if(match) {
+        indentationLevel = match[2].length;
+    }
 
     let reSource = `(\\r\\n|\\r|\\n).{0,${indentationLevel}}`;
     const reMatchIndent = new RegExp(reSource, 'g');
 
-    if(values[0] === outdentInstance || values[0] === outdent) {
+    // Is first interpolated value a reference to outdent, alone on its own line, without any preceding non-whitespace?
+    if(
+        (values[0] === outdentInstance || values[0] === outdent) &&
+        reOnlyWhitespaceWithAtLeastOneNewline.test(strings[0]) &&
+        reStartsWithNewlineOrIsEmpty.test(strings[1])
+    ) {
         values = values.slice(1);
         strings = strings.slice(1);
-        firstStringIndex = 1;
     }
 
     const l = strings.length;

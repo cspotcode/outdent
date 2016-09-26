@@ -63,6 +63,9 @@ const output = outdent`
 assert(output === '  Yo\n345\n    Hello world');
 ```
 
+*Note: `${outdent}` must be alone on its own line without anything before or after it. It cannot be preceded by any non-whitespace characters.*
+*If these conditions are not met, outdent will follow normal indentation-detection behavior.*
+
 ### Options
 
 #### `trimLeadingNewline`
@@ -126,18 +129,20 @@ template strings? Regardless, the `pass` option is here in case you need it. :-)
 
 #### Start on a new line
 
-You must start the contents of your template string on a new line *after* the opening backtick.  Otherwise, outdent
-has no way to detect how much leading indentation to remove.
+Start the contents of your template string on a new line *after* the opening backtick.  Otherwise, outdent
+has no choice but to detect indentation from the *second* line, which does not work in all situations.
 
 ```javascript
 // Bad
-const output = outdent` Hello
-                        world
+const output = outdent `* item 1
+                          * sub-item
 `;
+// output === '* item 1\n* sub-item'; Indentation of sub-item is lost
+
 // Good
-const output = outdent`
-    Hello
-    world
+const output = outdent `
+    * item 1
+      * sub-item
 `;
 ```
 

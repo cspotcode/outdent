@@ -1,6 +1,11 @@
 import {expect} from 'chai';
 import outdent from '../../lib/index';
 
+function makeStrings(...strings) {
+    strings.raw = strings;
+    return strings;
+}
+
 describe('outdent', () => {
 
     it('Removes indentation', () => {
@@ -69,7 +74,14 @@ describe('outdent', () => {
                 ${outdent}
                     Some text
             `).to.equal('    Some text');
+            
             expect(outdent`
+                ${outdent}
+            12345678
+            `).to.equal('5678');
+            
+            expect(outdent`
+            
                 ${outdent}
             12345678
             `).to.equal('5678');
@@ -77,6 +89,37 @@ describe('outdent', () => {
         
         doIt(outdent);
         doIt(outdent({someOptions: true}));
+    });
+    it('Does not get indentation level from ${outdent} when preceded by non-whitespace or with trailing characters on the same line', () => {
+        const toString = '' + outdent;
+
+        expect(outdent `non-whitespace
+                  ${outdent}
+                  Hello world!
+                  `).to.equal(`non-whitespace\n${toString}\nHello world!`);
+
+        expect(outdent `
+               foo${outdent}
+                  Hello world!
+                  `).to.equal(`foo${toString}\n   Hello world!`);
+
+        expect(outdent `
+            ${outdent}foo
+            Hello world!
+        `).to.equal(`${toString}foo\nHello world!`);
+
+        expect(outdent(makeStrings(
+            '\n' +
+            '    ', /* interpolated */ '   \n' +
+            '    Hello world!\n' +
+            '    '
+        ), outdent)).to.equal(`${toString}   \nHello world!`);
+        
+        expect(outdent `
+            foo
+            ${outdent}
+            Hello world!
+        `).to.equal(`foo\n${toString}\nHello world!`);
     });
     
     it('Does not trim leading newline when asked not to', () => {
@@ -136,11 +179,24 @@ describe('outdent', () => {
         ['Mac', '\r']
     ].forEach(([type, terminator]) => {
         it(`Handles ${type} newlines`, () => {
-            const strings = ['\n    Hello\n    world\n'.replace(/\n/g, terminator)];
+            const strings = makeStrings('\n    Hello\n    world\n'.replace(/\n/g, terminator));
             const expected = 'Hello\nworld'.replace(/\n/g, terminator);
-            strings.raw = strings;
             expect(outdent(strings)).to.equal(expected);
         });
     });
 
+    it('Preserves content that appears before the first newline, detecting indentation from the second line', () => {
+        expect(outdent `Hello
+                        world!
+                        `).to.equal('Hello\nworld!');
+    });
+
+    it('Accepts strings with no newlines', () => {
+        expect(outdent `Hello world!`).to.equal('Hello world!');
+    });
+
+    it('Accepts strings with no content after the first newline', () => {
+        expect(outdent `Hello world!
+        `).to.equal('Hello world!');
+    });
 });
