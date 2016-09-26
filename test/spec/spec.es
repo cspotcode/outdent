@@ -54,6 +54,19 @@ describe('outdent', () => {
         `).to.equal('Hello\n\nWorld');
     });
 
+    it('Accepts lines shorter than indentation whitespace', () => {
+        expect(outdent`
+            Hello
+removed
+            World
+        `).to.equal('Hello\n\nWorld');
+        expect(outdent`
+            Hello
+     
+            World
+        `).to.equal('Hello\n\nWorld');
+    });
+
     it('Preserves trailing spaces on blank lines', () => {
         expect(outdent`
             Hello
