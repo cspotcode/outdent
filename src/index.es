@@ -97,7 +97,7 @@ function concatStringsAndValues(strings, values) {
  * @return {outdent}
  */
 function createInstance(options) {
-    const cache = new createWeakMap();
+    const cache = createWeakMap();
 
     const ret = function outdent(stringsOrOptions, ...values) {
         if(has(stringsOrOptions, 'raw') && has(stringsOrOptions, 'length')) {
