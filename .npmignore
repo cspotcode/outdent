@@ -1,8 +1,0 @@
-.travis.yml
-.idea
-.vscode
-.gitignore
-.npmignore
-test
-.babelrc
-.editorconfig
