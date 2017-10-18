@@ -1,5 +1,5 @@
 {
-  "presets": ["es2015"],
+  "presets": ["env"],
   "only": ["src{/**,}/*.es", "test{/**,}/*.es"],
   "sourceMaps": "inline"
 }
