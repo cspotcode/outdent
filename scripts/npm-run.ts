@@ -1,8 +1,10 @@
 import * as rimraf from 'rimraf';
 import * as child_process from 'child_process';
 import * as which from 'which';
+import * as Path from 'path';
 
 async function run(script: string) {
+    console.log(`${ Path.relative(process.cwd(), __filename) } > ${ script }`);
     switch(script) {
         case 'clean':
             rimraf.sync('node_modules');
