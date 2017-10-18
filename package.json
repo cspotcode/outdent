@@ -8,6 +8,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "lint": "tslint src/**/*.ts test/**/*.ts scripts/**/*.ts",
     "build": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
     "test": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
     "prepack": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts"
