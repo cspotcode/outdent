@@ -6,10 +6,10 @@
   "jsnext:main": "src/index.es",
   "typings": "src/index.d.ts",
   "scripts": {
-    "clean": "rm -rf node_modules && rm -rf bin",
-    "build": "babel src -d lib",
-    "test": "npm run-script build && mocha && tsc -p test/ts",
-    "prepublish": "if [ \"$NPM_SKIP_PREPUBLISH\" != \"1\" ]; then ( echo Cleaning and installing && npm run-script clean && NPM_SKIP_PREPUBLISH=1 npm install && npm test ) ; else echo skipping recursive prepublish ; fi"
+    "clean": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "build": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "test": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "prepublish": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts"
   },
   "repository": {
     "type": "git",
@@ -35,9 +35,15 @@
     "babel-cli": "^6.3.17",
     "babel-preset-es2015": "^6.3.13",
     "babel-register": "^6.3.13",
+    "@types/node": "^8.0.44",
+    "@types/rimraf": "^2.0.2",
+    "@types/which": "^1.0.28",
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
+    "rimraf": "^2.6.2",
     "source-map-support": "^0.4.0",
-    "typescript": "^2.0.3"
   }
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3",
+    "which": "^1.3.0"
 }
