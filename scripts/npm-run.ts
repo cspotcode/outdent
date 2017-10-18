@@ -21,15 +21,14 @@ async function run(script: string) {
             exec `tsc -p test/ts`;
         break;
 
-        case 'prepublish':
-            if(process.env.NPM_SKIP_PREPUBLISH != '1') {
-                console.log('Cleaning and installing');
-                await run('clean');
-                exec `NPM_SKIP_PREPUBLISH=1 npm install`;
-                await run('test');
-            } else {
-                console.log('Skipping recursive prepublish');
-            }
+        case 'prepack':
+            /*
+             * Make extra-sure that we are producing a clean, valid package for publishing or otherwise.
+             * Force a full clean, reinstall of deps, rebuild, and run tests.
+             */
+            await run('clean');
+            exec `npm install`;
+            await run('test');
         break;
 
         default:

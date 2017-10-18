@@ -10,7 +10,7 @@
     "clean": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
     "build": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
     "test": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
-    "prepublish": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts"
+    "prepack": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts"
   },
   "repository": {
     "type": "git",
