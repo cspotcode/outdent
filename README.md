@@ -10,6 +10,22 @@ string.
 
 Outdent will remove those leading spaces, as well as the leading and trailing newlines.
 
+### Usage
+
+Import **outdent** using your module system of choice.
+
+CommonJS:
+```javascript
+const outdent = require('outdent');
+```
+
+ES6 Modules & TypeScript:
+```javascript
+import outdent from 'outdent';
+```
+
+#### Examples
+
 ```javascript
 import outdent from 'outdent';
 const markdown = outdent`
