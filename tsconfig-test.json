@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json.schemastore.org/tsconfig",
+    "extends": "./tsconfig.json",
+    // For testing, we use ts-node, so we never emit transpiled code, and we include both ./src and ./test directories
+    "compilerOptions": {
+        "rootDir": ".",
+        "noEmit": true,
+        "declaration": false,
+        "target": "es5",
+        "module": "commonjs",
+        "strict": false
+    },
+    "include": [
+        "src",
+        "test"
+    ]
+}

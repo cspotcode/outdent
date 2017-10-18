@@ -1,9 +1,9 @@
 import {expect} from 'chai';
 import outdent from '../../lib/index';
 
-function makeStrings(...strings) {
-    strings.raw = strings;
-    return strings;
+function makeStrings(...strings: Array<string>): TemplateStringsArray {
+    (strings as any as {raw: ReadonlyArray<string>}).raw = strings;
+    return strings as any as TemplateStringsArray;
 }
 
 describe('outdent', () => {
@@ -100,8 +100,11 @@ removed
             `).to.equal('5678');
         }
         
+        const configuredOutdentInstance = outdent({trimLeadingNewline: true});
+        expect(configuredOutdentInstance).to.not.equal(outdent);
+
         doIt(outdent);
-        doIt(outdent({someOptions: true}));
+        doIt(configuredOutdentInstance);
     });
     it('Does not get indentation level from ${outdent} when preceded by non-whitespace or with trailing characters on the same line', () => {
         const toString = '' + outdent;

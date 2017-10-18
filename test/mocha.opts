@@ -1,3 +1,2 @@
 --require test/require-first.js
---compilers es:babel-register
-./test/spec/**/*.{js,es}
+./test/spec/**/*.{js,ts}
