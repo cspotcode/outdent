@@ -1,0 +1,12 @@
+{
+    "extends": "tslint:latest",
+    "rules": {
+        "curly": [true, "ignore-same-line"],
+        "interface-name": false,
+        "no-unused-expression": [true, "allow-fast-null-checks"],
+        "one-variable-per-declaration": false,
+        "only-arrow-functions": false,
+        "quotemark": [true, "single", "avoid-escape", "avoid-template"],
+        "trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
+    }
+}
