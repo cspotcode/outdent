@@ -1,0 +1,5 @@
+{
+  "presets": ["env"],
+  "only": ["src{/**,}/*.es", "test{/**,}/*.es"],
+  "sourceMaps": "inline"
+}
