@@ -72,18 +72,18 @@ function exec(strings: TemplateStringsArray, ...values: Array<string>): void {
     return doTmpl(strings, ...values);
     function doTmpl(strings: TemplateStringsArray, ...values: Array<string | boolean | null | undefined>): void {
         const cmd: Array<string> = [];
-        const acc: Array<{type: 'whitespace' | 'literal' | 'interp', val?: any}> = [];
+        const acc: Array<{ type: 'whitespace' | 'literal' | 'interp', val?: any }> = [];
         for(let i = 0; i < strings.length; i++) {
             strings[i].split(/\s+/).forEach((v, i2, l) => {
                 // Ignore leading and trailing whitespace in the template
                 if(v === '' && ((i === 0 && i2 === 0) || (i === strings.length - 1 && i2 === l.length - 1))) return;
-                acc.push({type: 'literal', val: v});
+                acc.push({ type: 'literal', val: v });
                 if(i2 < l.length - 1) {
-                    acc.push({type: 'whitespace'});
+                    acc.push({ type: 'whitespace' });
                 }
             });
             if(i < strings.length - 1) {
-                acc.push({type: 'interp', val: values[i]});
+                acc.push({ type: 'interp', val: values[i] });
             }
         }
         let cmdIndex = 0;
@@ -112,7 +112,7 @@ function exec(strings: TemplateStringsArray, ...values: Array<string>): void {
         const args = cmd.slice(1);
         const result = child_process.spawnSync(executable, args, {
             stdio: 'inherit',
-            env: {...process.env, ...env}
+            env: { ...process.env, ...env }
         });
         if(result.status !== 0) throw new Error('Process returned non-zero exit status.');
     }
