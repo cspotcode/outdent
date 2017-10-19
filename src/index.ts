@@ -1,7 +1,7 @@
 type TODO = any;
 
 // In the absence of a WeakSet or WeakMap implementation, don't break, but don't cache either.
-function noop(...args: any[]) {}
+function noop(...args: any[]) {} // tslint:disable-line: no-empty
 function createWeakMap<K extends object, V>(): WeakMap<K, V> {
     if(typeof WeakMap !== 'undefined') {
         return new WeakMap<K, V>();
@@ -19,7 +19,7 @@ function fakeSetOrMap<K extends object, V = any>(): WeakMap<K, V> & WeakSet<K> {
         delete: noop as WeakMap<K, V>['delete'],
         get: noop as WeakMap<K, V>['get'],
         set: noop as WeakMap<K, V>['set'],
-        has: function(k: K) {return false;}
+        has(k: K) {return false;}
     };
 }
 
@@ -31,8 +31,8 @@ const has = function(obj: object, prop: string): boolean {
 
 // Copy all own enumerable properties from source to target
 function extend(target: TODO, source: TODO): TODO {
-    for(let prop in source) {
-        if(has(source, prop)) {
+    for(const prop in source) {
+        if (has(source, prop)) {
             target[prop] = source[prop];
         }
     }
@@ -45,7 +45,7 @@ const reStartsWithNewlineOrIsEmpty = /^(?:[\r\n]|$)/;
 const reDetectIndentation = /(\r\n|\r|\n)([ \t]*)(?:[^ \t\r\n]|$)/;
 const reOnlyWhitespaceWithAtLeastOneNewline = /^[ \t]*[\r\n][ \t\r\n]*$/;
 
-function _outdent(strings: ReadonlyArray<string>, values: Array<any>, outdentInstance: Outdent, options: Options) {
+function _outdent(strings: ReadonlyArray<string>, values: any[], outdentInstance: Outdent, options: Options) {
     // If first interpolated value is a reference to outdent,
     // determine indentation level from the indentation of the interpolated value.
     let indentationLevel = 0;
@@ -55,7 +55,7 @@ function _outdent(strings: ReadonlyArray<string>, values: Array<any>, outdentIns
         indentationLevel = match[2].length;
     }
 
-    let reSource = `(\\r\\n|\\r|\\n).{0,${indentationLevel}}`;
+    const reSource = `(\\r\\n|\\r|\\n).{0,${indentationLevel}}`;
     const reMatchIndent = new RegExp(reSource, 'g');
 
     // Is first interpolated value a reference to outdent, alone on its own line, without any preceding non-whitespace?
@@ -82,7 +82,7 @@ function _outdent(strings: ReadonlyArray<string>, values: Array<any>, outdentIns
         }
         return v;
     });
-    
+
     return concatStringsAndValues(outdentedStrings, values);
 }
 
@@ -110,9 +110,10 @@ function isTemplateStringsArray(v: any): v is TemplateStringsArray {
 function createInstance(options: Options): Outdent {
     const cache = createWeakMap<TemplateStringsArray, string>();
 
-    function outdent(stringsOrOptions: TemplateStringsArray, ...values: Array<any>): string;
+    // tslint:disable no-shadowed-variable
+    function outdent(stringsOrOptions: TemplateStringsArray, ...values: any[]): string;
     function outdent(stringsOrOptions: Options): Outdent;
-    function outdent(stringsOrOptions: TemplateStringsArray | Options, ...values: Array<any>): string | Outdent {
+    function outdent(stringsOrOptions: TemplateStringsArray | Options, ...values: any[]): string | Outdent {
         if(isTemplateStringsArray(stringsOrOptions)) {
             // TODO Enable semi-caching, both when the first interpolated value is `outdent`, and when it's not
             const strings = stringsOrOptions;
@@ -129,7 +130,8 @@ function createInstance(options: Options): Outdent {
             // Create and return a new instance of outdent with the given options
             return createInstance(extend(extend({}, options), stringsOrOptions || {}));
         }
-    };
+    }
+    // tslint:enable no-shadowed-variable
 
     return outdent;
 }
@@ -143,7 +145,7 @@ export interface Outdent {
     /**
      * Remove indentation from a template literal.
      */
-    (strings: TemplateStringsArray, ...values: Array<any>): string;
+    (strings: TemplateStringsArray, ...values: any[]): string;
     /**
      * Create and return a new Outdent instance with the given options.
      */
@@ -169,4 +171,3 @@ if(typeof module !== 'undefined') {
     (outdent as any).default = outdent;
     (outdent as any).outdent = outdent;
 }
-
