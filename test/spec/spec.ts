@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import outdent from '../../lib/index';
 
-function makeStrings(...strings: Array<string>): TemplateStringsArray {
+function makeStrings(...strings: string[]): TemplateStringsArray {
     (strings as any as {raw: ReadonlyArray<string>}).raw = strings;
     return strings as any as TemplateStringsArray;
 }
@@ -30,13 +30,15 @@ describe('outdent', () => {
             World
         `).to.equal('\nHello\nWorld');
     });
-    
+
     it('Preserves extra trailing newlines', () => {
+        // tslint:disable no-trailing-whitespace
         expect(outdent`
             Hello
             World
             
         `).to.equal('Hello\nWorld\n');
+        // tslint:enable no-trailing-whitespace
     });
 
     it('Removes non-whitespace characters if they\'re in indentation columns', () => {
@@ -60,19 +62,24 @@ describe('outdent', () => {
 removed
             World
         `).to.equal('Hello\n\nWorld');
+
+        // tslint:disable no-trailing-whitespace
         expect(outdent`
             Hello
      
             World
         `).to.equal('Hello\n\nWorld');
+        // tslint:enable no-trailing-whitespace
     });
 
     it('Preserves trailing spaces on blank lines', () => {
+        // tslint:disable no-trailing-whitespace
         expect(outdent`
             Hello
               
             World
         `).to.equal('Hello\n  \nWorld');
+        // tslint:enable no-trailing-whitespace
     });
 
     it('Handles empty strings', () => {
@@ -80,33 +87,33 @@ removed
 
         `).to.equal('');
     });
-    
+
     it('Gets indentation level from first interpolated value being a reference to outdent', () => {
-        function doIt(outdent) {
-            expect(outdent`
-                ${outdent}
+        function doIt(tag) {
+            expect(tag`
+                ${tag}
                     Some text
             `).to.equal('    Some text');
-            
-            expect(outdent`
-                ${outdent}
+
+            expect(tag`
+                ${tag}
             12345678
             `).to.equal('5678');
-            
-            expect(outdent`
-            
-                ${outdent}
+
+            expect(tag`
+
+                ${tag}
             12345678
             `).to.equal('5678');
         }
-        
+
         const configuredOutdentInstance = outdent({trimLeadingNewline: true});
         expect(configuredOutdentInstance).to.not.equal(outdent);
 
         doIt(outdent);
         doIt(configuredOutdentInstance);
     });
-    it('Does not get indentation level from ${outdent} when preceded by non-whitespace or with trailing characters on the same line', () => {
+    it('Does not get indentation level from outdent when preceded by non-whitespace or with trailing characters on the same line', () => { // tslint:disable-line:max-line-length
         const toString = '' + outdent;
 
         expect(outdent `non-whitespace
@@ -130,14 +137,14 @@ removed
             '    Hello world!\n' +
             '    '
         ), outdent)).to.equal(`${toString}   \nHello world!`);
-        
+
         expect(outdent `
             foo
             ${outdent}
             Hello world!
         `).to.equal(`foo\n${toString}\nHello world!`);
     });
-    
+
     it('Does not trim leading newline when asked not to', () => {
         expect(outdent({
             trimLeadingNewline: false
@@ -169,21 +176,24 @@ removed
             trimTrailingNewline: false
         })`
         `).to.equal('\n');
-        
+
         expect(outdent({
             trimLeadingNewline: false,
             trimTrailingNewline: false
         })`
-        
+
         `).to.equal('\n\n');
     });
-    
+
     it('Merges options objects', () => {
         const customOutdent = outdent({trimLeadingNewline: false})({trimTrailingNewline: false});
+
+        // tslint:disable no-trailing-whitespace
         expect(customOutdent`
         
         `).to.equal('\n\n');
-        
+        // tslint:enable no-trailing-whitespace
+
         expect(customOutdent({trimLeadingNewline: true})`
             Hi
         `).to.equal('Hi\n');

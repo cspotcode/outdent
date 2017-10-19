@@ -1,7 +1,6 @@
 // This file is meant to be compiled but not executed.  It tests our type declarations.
 
-import alsoOutdent from '../../';
-import {outdent, Outdent, Options} from '../../';
+import alsoOutdent, {Options, outdent, Outdent} from '../../';
 
 let s: string;
 s = outdent `

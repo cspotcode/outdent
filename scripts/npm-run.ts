@@ -1,7 +1,9 @@
-import * as rimraf from 'rimraf';
+/* tslint:disable no-console no-unused-expression */
+
 import * as child_process from 'child_process';
-import * as which from 'which';
 import * as Path from 'path';
+import * as rimraf from 'rimraf';
+import * as which from 'which';
 
 async function run(script: string) {
     console.log(`${ Path.relative(process.cwd(), __filename) } > ${ script }`);
@@ -10,18 +12,18 @@ async function run(script: string) {
             rimraf.sync('node_modules');
             rimraf.sync('lib');
             rimraf.sync('lib-module');
-        break;
+            break;
 
         case 'build':
             exec `tsc -p .`;
             exec `tsc -p ./tsconfig-module.json`;
-        break;
+            break;
 
         case 'test':
             await run('build');
             exec `mocha`;
             exec `tsc -p test/ts`;
-        break;
+            break;
 
         case 'prepack':
             /*
@@ -31,7 +33,7 @@ async function run(script: string) {
             await run('clean');
             exec `npm install`;
             await run('test');
-        break;
+            break;
 
         default:
             throw new Error(`Unexpected npm lifecycle event: ${ script }`);
@@ -45,12 +47,12 @@ async function main() {
 
 main();
 
-
 // TODO publish this as a separate NPM module
-function exec(strings: TemplateStringsArray, ...values: Array<string>): void {
+function exec(strings: TemplateStringsArray, ...values: string[]): void {
     return doTmpl(strings, ...values);
+    // tslint:disable-next-line no-shadowed-variable
     function doTmpl(strings: TemplateStringsArray, ...values: Array<string | boolean | null | undefined>): void {
-        const cmd: Array<string> = [];
+        const cmd: string[] = [];
         const acc: Array<{type: 'whitespace' | 'literal' | 'interp', val?: any}> = [];
         for(let i = 0; i < strings.length; i++) {
             strings[i].split(/\s+/).forEach((v, i2, l) => {
@@ -66,8 +68,8 @@ function exec(strings: TemplateStringsArray, ...values: Array<string>): void {
             }
         }
         let cmdIndex = 0;
-        let prevTokType: 'whitespace' | 'notWhitespace' | undefined = undefined;
-        for(let tok of acc) {
+        let prevTokType: 'whitespace' | 'notWhitespace' | undefined;
+        for(const tok of acc) {
             if(tok.type === 'whitespace' && prevTokType !== 'whitespace') {
                 prevTokType = 'whitespace';
                 ++cmdIndex;
