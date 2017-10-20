@@ -29,6 +29,11 @@ const runners = {
     async lint() {
         // Pass globs directly to tslint, avoiding shell expansion.
         exec`tslint src/**/*.ts test/**/*.ts`;
+        exec`tsfmt --baseDir . --useTsconfig ./tsconfig-test.json --verify`;
+    },
+    async format() {
+        // Pass globs directly to tslint, avoiding shell expansion.
+        exec`tsfmt --replace src/**/*.ts test/**/*.ts`;
     },
     async prepack() {
         /*

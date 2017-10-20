@@ -8,6 +8,7 @@
         "module": "commonjs",
         "stripInternal": true,
         "sourceMap": true,
+        "newLine": "LF",
 
         // Checking options
         "strict": true,
