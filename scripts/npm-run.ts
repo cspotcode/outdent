@@ -1,49 +1,60 @@
+import * as fs from 'fs';
 import * as rimraf from 'rimraf';
 import * as child_process from 'child_process';
 import * as which from 'which';
 import * as Path from 'path';
 
 async function run(script: string) {
-    console.log(`${ Path.relative(process.cwd(), __filename) } > ${ script }`);
-    switch(script) {
-        case 'clean':
-            rimraf.sync('node_modules');
-            rimraf.sync('lib');
-            rimraf.sync('lib-module');
-        break;
-
-        case 'build':
-            exec `tsc -p .`;
-            exec `tsc -p ./tsconfig-module.json`;
-        break;
-
-        case 'test':
-            await run('build');
-            exec `mocha`;
-            exec `tsc -p test/ts`;
-        break;
-
-        case 'prepack':
-            /*
-             * Make extra-sure that we are producing a clean, valid package for publishing or otherwise.
-             * Force a full clean, reinstall of deps, rebuild, and run tests.
-             */
-            await run('clean');
-            exec `npm install`;
-            await run('test');
-        break;
-
-        default:
-            throw new Error(`Unexpected npm lifecycle event: ${ script }`);
-    }
+    console.log(`${ Path.relative(process.cwd(), __filename) }: Running "${ script }"`);
+    if(!allScripts.some(v => v === script)) throw new Error(`Unexpected npm lifecycle event: ${ script }`);
+    await runners[script]();
 }
+
+const runners = {
+    async clean() {
+        rimraf.sync('node_modules');
+        rimraf.sync('lib');
+        rimraf.sync('lib-module');
+    },
+    async build() {
+        exec`tsc --project .`;
+        exec`tsc --project ./tsconfig-module.json`;
+    },
+    async test() {
+        await run('build');
+        exec`mocha`;
+        exec`tsc --project test/ts`;
+    },
+    async prepack() {
+        /*
+            * Make extra-sure that we are producing a clean, valid package for publishing or otherwise.
+            * Force a full clean, reinstall of deps, rebuild, and run tests.
+            */
+        await run('clean');
+        exec`npm install`;
+        await run('test');
+    },
+    async setup() {
+        const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+        pkg.scripts = {};
+        allScripts.forEach(script => {
+            pkg.scripts[script] = 'ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts';
+        });
+        fs.writeFileSync('package.json', JSON.stringify(pkg, null, '  '));
+    },
+};
+
+const allScripts = Object.keys(runners);
 
 async function main() {
     const script = process.env.NPM_LIFECYCLE_EVENT;
     await run(script!);
 }
 
-main();
+main().catch(e => {
+    console.error(e);
+    process.exit(1);
+});
 
 
 // TODO publish this as a separate NPM module
