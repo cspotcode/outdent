@@ -24,6 +24,11 @@ const runners = {
         await run('build');
         exec`mocha`;
         exec`tsc --project test/ts`;
+        await run('lint');
+    },
+    async lint() {
+        // Pass globs directly to tslint, avoiding shell expansion.
+        exec`tslint src/**/*.ts test/**/*.ts`;
     },
     async prepack() {
         /*
