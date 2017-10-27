@@ -10,8 +10,25 @@ string.
 
 Outdent will remove those leading spaces, as well as the leading and trailing newlines.
 
+### Usage
+
+Import **outdent** using your module system of choice.
+
+CommonJS:
+```javascript
+const outdent = require('outdent');
+```
+
+ES6 Modules & TypeScript:
 ```javascript
 import outdent from 'outdent';
+```
+
+#### Examples
+
+```javascript
+import outdent from 'outdent';
+
 const markdown = outdent`
     # My Markdown File
 
@@ -19,19 +36,23 @@ const markdown = outdent`
 
         console.log("hello world!");
 `;
+
 console.log(markdown);
+
 fs.writeFileSync('output.md', markdown);
 ```
 
 The contents of `output.md` do not have the leading indentation:
 
-    # My Markdown File
+```markdown
+# My Markdown File
 
-    Here is some indented code:
+Here is some indented code:
 
-        console.log("hello world!");
+    console.log("hello world!");
+```
 
-As a Javascript string:
+As a JavaScript string:
 
 ```javascript
 var markdown = '# My Markdown File\n' +
@@ -41,17 +62,17 @@ var markdown = '# My Markdown File\n' +
                '    console.log("hello world!");';
 ```
 
-You can pass options to outdent to control its behavior.  They are explained in [Options](#options).
+You can pass options to **outdent** to control its behavior. They are explained in [Options](#options).
 
 ```javascript
 const output = outdent({trimLeadingNewline: false, trimTrailingNewline: false})`
     Hello world!
 `;
+
 assert(output === '\nHello world!\n');
 ```
-    
-You can explicitly specify the indentation level by passing `outdent` as the first interpolated value.  Its position
-sets the indentation level and it is removed from the output.
+
+You can explicitly specify the indentation level by passing `outdent` as the first interpolated value. Its position sets the indentation level and it is removed from the output:
 
 ```javascript
 const output = outdent`
@@ -60,6 +81,7 @@ const output = outdent`
     12345
           Hello world
 `;
+
 assert(output === '  Yo\n345\n    Hello world');
 ```
 
@@ -80,18 +102,22 @@ Whether or not outdent should remove the leading and/or trailing newline from yo
 var s = outdent({trimLeadingNewline: false})`
     Hello
 `;
+
 assert(s === '\nHello');
+
 s = outdent({trimTrailingNewline: false})`
     Hello
 `
+
 assert(s === 'Hello\n');
+
 s = outdent({trimLeadingNewline: false, trimTrailingNewline: false})`
-    
+
 `;
+
 assert(s === '\n\n');
 ```
 
-<!--
 #### `pass`
 
 Returns an arguments array that can be passed to another tagging function, instead of returning a string.
@@ -123,8 +149,6 @@ function query(barVal) {
 being logged and looks better without indentation?  Perhaps you're doing something totally different with tagged
 template strings? Regardless, the `pass` option is here in case you need it. :-)*
 
--->
-
 ### Gotchas
 
 #### Start on a new line
@@ -148,19 +172,15 @@ const output = outdent `
 
 #### Spaces and tabs
 
-Spaces and tabs are treated identically.  outdent does not verify that you are using spaces or tabs consistently; they
-are all treated as a single character for the purpose of removing indentation.  Spaces, tabs, and smart tabs should
-all work correctly provided you use them consistently.
+Spaces and tabs are treated identically. **outdent** does not verify that you are using spaces or tabs consistently; they are all treated as a single character for the purpose of removing indentation. Spaces, tabs, and smart tabs should all work correctly provided you use them consistently.
 
 ### TypeScript declarations
 
 This module includes TypeScript type declarations so you will get code completion and error-checking without installing anything else.
 
-<!--
 ### TODOs
 
 [ ] Support tabs and/or smart tabs (verify they're being used correctly?  Throw an error if not?)
--->
 
 ### Questions or Bugs?
 
