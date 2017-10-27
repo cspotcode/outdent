@@ -57,7 +57,8 @@ const runners = {
 const allScripts = Object.keys(runners);
 
 async function main() {
-    const script = process.env.NPM_LIFECYCLE_EVENT;
+    console.log(process.env);
+    const script = process.env.npm_lifecycle_event;
     await run(script!);
 }
 
