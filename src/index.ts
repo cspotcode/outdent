@@ -1,7 +1,7 @@
 type TODO = any;
 
 // In the absence of a WeakSet or WeakMap implementation, don't break, but don't cache either.
-function noop(...args: any[]) {}
+function noop(...args: Array<any>) { }
 function createWeakMap<K extends object, V>(): WeakMap<K, V> {
     if(typeof WeakMap !== 'undefined') {
         return new WeakMap<K, V>();
@@ -19,7 +19,7 @@ function fakeSetOrMap<K extends object, V = any>(): WeakMap<K, V> & WeakSet<K> {
         delete: noop as WeakMap<K, V>['delete'],
         get: noop as WeakMap<K, V>['get'],
         set: noop as WeakMap<K, V>['set'],
-        has: function(k: K) {return false;}
+        has(k: K) { return false; },
     };
 }
 
@@ -31,7 +31,7 @@ const has = function(obj: object, prop: string): boolean {
 
 // Copy all own enumerable properties from source to target
 function extend(target: TODO, source: TODO): TODO {
-    for(let prop in source) {
+    for(const prop in source) {
         if(has(source, prop)) {
             target[prop] = source[prop];
         }
@@ -55,7 +55,7 @@ function _outdent(strings: ReadonlyArray<string>, values: Array<any>, outdentIns
         indentationLevel = match[2].length;
     }
 
-    let reSource = `(\\r\\n|\\r|\\n).{0,${indentationLevel}}`;
+    const reSource = `(\\r\\n|\\r|\\n).{0,${ indentationLevel }}`;
     const reMatchIndent = new RegExp(reSource, 'g');
 
     // Is first interpolated value a reference to outdent, alone on its own line, without any preceding non-whitespace?
@@ -82,7 +82,7 @@ function _outdent(strings: ReadonlyArray<string>, values: Array<any>, outdentIns
         }
         return v;
     });
-    
+
     return concatStringsAndValues(outdentedStrings, values);
 }
 
@@ -110,9 +110,11 @@ function isTemplateStringsArray(v: any): v is TemplateStringsArray {
 function createInstance(options: Options): Outdent {
     const cache = createWeakMap<TemplateStringsArray, string>();
 
+    /* tslint:disable:no-shadowed-variable */
     function outdent(stringsOrOptions: TemplateStringsArray, ...values: Array<any>): string;
     function outdent(stringsOrOptions: Options): Outdent;
     function outdent(stringsOrOptions: TemplateStringsArray | Options, ...values: Array<any>): string | Outdent {
+        /* tslint:enable:no-shadowed-variable */
         if(isTemplateStringsArray(stringsOrOptions)) {
             // TODO Enable semi-caching, both when the first interpolated value is `outdent`, and when it's not
             const strings = stringsOrOptions;
@@ -129,14 +131,14 @@ function createInstance(options: Options): Outdent {
             // Create and return a new instance of outdent with the given options
             return createInstance(extend(extend({}, options), stringsOrOptions || {}));
         }
-    };
+    }
 
     return outdent;
 }
 
 const outdent = createInstance({
     trimLeadingNewline: true,
-    trimTrailingNewline: true
+    trimTrailingNewline: true,
 });
 
 export interface Outdent {
@@ -156,7 +158,7 @@ export interface Options {
 
 // Named exports.  Simple and preferred.
 export default outdent;
-export {outdent};
+export { outdent };
 
 // In CommonJS environments, enable `var outdent = require('outdent');` by
 // replacing the exports object.
@@ -165,8 +167,7 @@ declare var module: any, exports: any;
 if(typeof module !== 'undefined') {
     module.exports = exports = outdent;
     // TODO is this necessary?
-    Object.defineProperty(outdent, '__esModule', {value: true});
+    Object.defineProperty(outdent, '__esModule', { value: true });
     (outdent as any).default = outdent;
     (outdent as any).outdent = outdent;
 }
-
