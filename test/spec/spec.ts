@@ -7,7 +7,6 @@ function makeStrings(...strings: Array<string>): TemplateStringsArray {
 }
 
 describe('outdent', () => {
-
     it('Removes indentation', () => {
         expect(outdent`
             Hello
@@ -35,7 +34,7 @@ describe('outdent', () => {
         expect(outdent`
             Hello
             World
-            
+
         `).to.equal('Hello\nWorld\n');
     });
 
@@ -62,7 +61,7 @@ removed
         `).to.equal('Hello\n\nWorld');
         expect(outdent`
             Hello
-     
+
             World
         `).to.equal('Hello\n\nWorld');
     });
@@ -94,7 +93,7 @@ removed
             `).to.equal('5678');
 
             expect(od`
-            
+
                 ${ od }
             12345678
             `).to.equal('5678');
@@ -153,7 +152,6 @@ removed
             Hello
             World
         `).to.equal('Hello\nWorld\n');
-
     });
     it('Does not trim trailing nor leading newline when asked not to', () => {
         expect(outdent({
@@ -174,14 +172,14 @@ removed
             trimLeadingNewline: false,
             trimTrailingNewline: false,
         }) `
-        
+
         `).to.equal('\n\n');
     });
 
     it('Merges options objects', () => {
         const customOutdent = outdent({ trimLeadingNewline: false })({ trimTrailingNewline: false });
         expect(customOutdent`
-        
+
         `).to.equal('\n\n');
 
         expect(customOutdent({ trimLeadingNewline: true }) `
@@ -214,5 +212,14 @@ removed
     it('Accepts strings with no content after the first newline', () => {
         expect(outdent`Hello world!
         `).to.equal('Hello world!');
+    });
+
+    it('Can be called like a function, passing a string to it.', () => {
+        expect(
+            outdent(`
+                Hello world!
+                  Hello world!
+            `)
+        ).to.equal('Hello world!\n  Hello world!');
     });
 });

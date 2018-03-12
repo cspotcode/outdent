@@ -111,11 +111,14 @@ function createInstance(options: Options): Outdent {
     const cache = createWeakMap<TemplateStringsArray, string>();
 
     /* tslint:disable:no-shadowed-variable */
+    function outdent(stringsOrOptions: string): string;
     function outdent(stringsOrOptions: TemplateStringsArray, ...values: Array<any>): string;
     function outdent(stringsOrOptions: Options): Outdent;
-    function outdent(stringsOrOptions: TemplateStringsArray | Options, ...values: Array<any>): string | Outdent {
+    function outdent(stringsOrOptions: string | TemplateStringsArray | Options, ...values: Array<any>): string | Outdent {
         /* tslint:enable:no-shadowed-variable */
-        if(isTemplateStringsArray(stringsOrOptions)) {
+        if(typeof stringsOrOptions === 'string') {
+            return _outdent([stringsOrOptions], [], outdent, options);
+        } else if(isTemplateStringsArray(stringsOrOptions)) {
             // TODO Enable semi-caching, both when the first interpolated value is `outdent`, and when it's not
             const strings = stringsOrOptions;
             // Serve from cache only if there are no interpolated values
@@ -142,6 +145,10 @@ const outdent = createInstance({
 });
 
 export interface Outdent {
+    /**
+     * Remove indentation from a string.
+     */
+    (str: string): string;
     /**
      * Remove indentation from a template literal.
      */
