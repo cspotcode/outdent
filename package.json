@@ -61,5 +61,6 @@
     "README.md",
     "tsconfig-module.json",
     "tsconfig.json"
-  ]
+  ],
+  "dependencies": {}
 }
