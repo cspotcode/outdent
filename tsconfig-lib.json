@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        // Emit options
+        "rootDir": "src",
+        "outDir": "lib",
+        "declaration": true,
+        "target": "es5",
+        "module": "commonjs",
+        "stripInternal": true,
+        "sourceMap": true,
+        "newLine": "LF",
+
+        // Checking options
+        "strict": true,
+        "charset": "utf8",
+        "lib": ["es5", "es2015.collection"],
+
+        "plugins": [
+            {"name": "tslint-language-service"}
+        ]
+    },
+    "include": [
+        "src"
+    ]
+}

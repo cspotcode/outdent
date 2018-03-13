@@ -17,7 +17,7 @@ const runners = {
         rimraf.sync('lib-module');
     },
     async build() {
-        exec`tsc --project .`;
+        exec`tsc --project ./tsconfig-lib.json`;
         exec`tsc --project ./tsconfig-module.json`;
     },
     async test() {
@@ -28,7 +28,8 @@ const runners = {
     },
     async lint() {
         // Pass globs directly to tslint, avoiding shell expansion.
-        exec`tslint src/**/*.ts test/**/*.ts`;
+        exec`tslint --config ./tslint-lib.json --project ./tsconfig-lib.json `;
+        exec`tslint --config ./tslint-test.json --project ./tsconfig-test.json --exclude src/**/*`;
         exec`tsfmt --baseDir . --useTsconfig ./tsconfig-test.json --verify`;
     },
     async format() {
