@@ -31,7 +31,7 @@ const has = function(obj: object, prop: string): boolean {
 
 // Copy all own enumerable properties from source to target
 function extend<T, S extends object>(target: T, source: S) {
-    type Extended = T & { [K in keyof S]: S[K] };
+    type Extended = T & {[K in keyof S]: S[K]};
     for(const prop in source) {
         if(has(source, prop)) {
             (target as Extended)[prop] = source[prop];
