@@ -69,7 +69,7 @@ removed
     it('Preserves trailing spaces on blank lines', () => {
         expect(outdent`
             Hello
-              
+
             World
         `).to.equal('Hello\n  \nWorld');
     });
@@ -214,9 +214,9 @@ removed
         `).to.equal('Hello world!');
     });
 
-    it('Can be called like a function, passing a string to it.', () => {
+    it('outdent.string takes strings as input and formats them', () => {
         expect(
-            outdent(`
+            outdent.string(`
                 Hello world!
                   Hello world!
             `)
