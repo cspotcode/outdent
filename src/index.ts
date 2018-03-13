@@ -30,13 +30,14 @@ const has = function(obj: object, prop: string): boolean {
 };
 
 // Copy all own enumerable properties from source to target
-function extend(target: TODO, source: TODO): TODO {
+function extend<T, S extends object>(target: T, source: S) {
+    type Extended = T & { [K in keyof S]: S[K] };
     for(const prop in source) {
         if(has(source, prop)) {
-            target[prop] = source[prop];
+            (target as Extended)[prop] = source[prop];
         }
     }
-    return target;
+    return target as Extended;
 }
 
 const reLeadingNewline = /^[ \t]*(?:\r\n|\r|\n)/;
