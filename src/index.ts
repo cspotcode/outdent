@@ -123,7 +123,7 @@ function createInstance(options: Options): Outdent {
             if(values.length === 0 && cache.has(strings)) return cache.get(strings)!;
 
             // Perform outdentation
-            const rendered = _outdent(strings, values, outdent, options);
+            const rendered = _outdent(strings, values, fullOutdent, options);
 
             // Store into the cache only if there are no interpolated values
             values.length === 0 && cache.set(strings, rendered);
@@ -134,11 +134,13 @@ function createInstance(options: Options): Outdent {
         }
     }
 
-    (outdent as any).string = (str: string): string => {
-      return _outdent([str], [], outdent, options);
-    };
+    const fullOutdent = extend(outdent, {
+        string(str: string): string {
+            return _outdent([str], [], fullOutdent, options);
+        },
+    });
 
-    return outdent;
+    return fullOutdent;
 }
 
 const outdent = createInstance({
@@ -155,6 +157,11 @@ export interface Outdent {
      * Create and return a new Outdent instance with the given options.
      */
     (options: Options): Outdent;
+
+    /**
+     * Remove indentation from a string
+     */
+    string(str: string): string;
 }
 export interface Options {
     trimLeadingNewline?: boolean;
