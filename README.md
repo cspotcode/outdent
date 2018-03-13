@@ -88,6 +88,14 @@ assert(output === '  Yo\n345\n    Hello world');
 *Note: `${outdent}` must be alone on its own line without anything before or after it. It cannot be preceded by any non-whitespace characters.*
 *If these conditions are not met, outdent will follow normal indentation-detection behavior.*
 
+Outdent can also remove indentation from plain strings via the `string` method.
+
+```javascript
+const output = outdent.string('\n    Hello world!\n');
+
+assert(output === 'Hello world!');
+```
+
 ### Options
 
 #### `trimLeadingNewline`
