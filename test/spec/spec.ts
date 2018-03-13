@@ -7,6 +7,7 @@ function makeStrings(...strings: Array<string>): TemplateStringsArray {
 }
 
 describe('outdent', () => {
+
     it('Removes indentation', () => {
         expect(outdent`
             Hello
@@ -34,7 +35,7 @@ describe('outdent', () => {
         expect(outdent`
             Hello
             World
-
+            
         `).to.equal('Hello\nWorld\n');
     });
 
@@ -61,7 +62,7 @@ removed
         `).to.equal('Hello\n\nWorld');
         expect(outdent`
             Hello
-
+     
             World
         `).to.equal('Hello\n\nWorld');
     });
@@ -69,7 +70,7 @@ removed
     it('Preserves trailing spaces on blank lines', () => {
         expect(outdent`
             Hello
-
+              
             World
         `).to.equal('Hello\n  \nWorld');
     });
@@ -93,7 +94,7 @@ removed
             `).to.equal('5678');
 
             expect(od`
-
+            
                 ${ od }
             12345678
             `).to.equal('5678');
@@ -152,6 +153,7 @@ removed
             Hello
             World
         `).to.equal('Hello\nWorld\n');
+
     });
     it('Does not trim trailing nor leading newline when asked not to', () => {
         expect(outdent({
@@ -172,14 +174,14 @@ removed
             trimLeadingNewline: false,
             trimTrailingNewline: false,
         }) `
-
+        
         `).to.equal('\n\n');
     });
 
     it('Merges options objects', () => {
         const customOutdent = outdent({ trimLeadingNewline: false })({ trimTrailingNewline: false });
         expect(customOutdent`
-
+        
         `).to.equal('\n\n');
 
         expect(customOutdent({ trimLeadingNewline: true }) `
