@@ -215,4 +215,13 @@ removed
         expect(outdent`Hello world!
         `).to.equal('Hello world!');
     });
+
+    it('outdent.string takes strings as input and formats them', () => {
+        expect(
+            outdent.string(`
+                Hello world!
+                  Hello world!
+            `)
+        ).to.equal('Hello world!\n  Hello world!');
+    });
 });

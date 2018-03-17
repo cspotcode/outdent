@@ -1,9 +1,22 @@
 language: node_js
 node_js:
-  - "stable"
-  - "4.2.3"
+  # Test on latest stable and lts versions
+  - "lts/*"
+  - "node"
 
 # For performance:
 sudo: false
 git:
   depth: 1
+
+install:
+  # Run `npm ci` if appropriate and version of npm is new enough; otherwise `npm install`
+  - if [ -f package-lock.json ] && npm ci --help 2>&1 >/dev/null ; then npm ci ; else npm install ; fi
+
+# Cache node_modules (unless there is no benefit)
+cache:
+  directories:
+    - node_modules
+before_cache:
+  # Suppress caching node_modules if it won't do any good.  `npm ci` ignores and throws away pre-existing `node_module`
+  - if [ -f package-lock.json ] && npm ci --help 2>&1 >/dev/null ; then mv node_modules node_modules_do_not_cache ; fi

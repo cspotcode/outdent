@@ -30,13 +30,14 @@ const has = function(obj: object, prop: string): boolean {
 };
 
 // Copy all own enumerable properties from source to target
-function extend(target: TODO, source: TODO): TODO {
+function extend<T, S extends object>(target: T, source: S) {
+    type Extended = T & S;
     for(const prop in source) {
         if(has(source, prop)) {
-            target[prop] = source[prop];
+            (target as any)[prop] = source[prop];
         }
     }
-    return target;
+    return target as Extended;
 }
 
 const reLeadingNewline = /^[ \t]*(?:\r\n|\r|\n)/;
@@ -122,7 +123,7 @@ function createInstance(options: Options): Outdent {
             if(values.length === 0 && cache.has(strings)) return cache.get(strings)!;
 
             // Perform outdentation
-            const rendered = _outdent(strings, values, outdent, options);
+            const rendered = _outdent(strings, values, fullOutdent, options);
 
             // Store into the cache only if there are no interpolated values
             values.length === 0 && cache.set(strings, rendered);
@@ -133,7 +134,13 @@ function createInstance(options: Options): Outdent {
         }
     }
 
-    return outdent;
+    const fullOutdent = extend(outdent, {
+        string(str: string): string {
+            return _outdent([str], [], fullOutdent, options);
+        },
+    });
+
+    return fullOutdent;
 }
 
 const outdent = createInstance({
@@ -150,6 +157,11 @@ export interface Outdent {
      * Create and return a new Outdent instance with the given options.
      */
     (options: Options): Outdent;
+
+    /**
+     * Remove indentation from a string
+     */
+    string(str: string): string;
 }
 export interface Options {
     trimLeadingNewline?: boolean;

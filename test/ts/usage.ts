@@ -13,3 +13,8 @@ const newOutdent2 = newOutdent1({ trimLeadingNewline: false });
 s = newOutdent2`
     hello ${ 123 } world`;
 const outdent2: Outdent = newOutdent2;
+s = outdent.string(`
+    bar
+      baz
+        qux
+`);
