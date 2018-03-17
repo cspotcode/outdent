@@ -1,6 +1,6 @@
 {
   "name": "outdent",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Remove leading indentation from ES6 template literals.",
   "main": "lib/index.js",
   "jsnext:main": "lib-module/index.js",
