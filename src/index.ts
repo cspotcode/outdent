@@ -176,7 +176,7 @@ export { outdent };
 // replacing the exports object.
 // Make sure that our replacement includes the named exports from above.
 declare var module: any, exports: any;
-if(typeof module !== 'undefined') {
+if(typeof module !== 'undefined' && typeof exports !== 'undefined') {
     module.exports = exports = outdent;
     // TODO is this necessary?
     Object.defineProperty(outdent, '__esModule', { value: true });
