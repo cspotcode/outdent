@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import outdent from '../../lib/index';
+import outdent from '../..';
 
 function makeStrings(...strings: Array<string>): TemplateStringsArray {
     (strings as any as { raw: ReadonlyArray<string> }).raw = strings;
