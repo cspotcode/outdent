@@ -2,7 +2,7 @@ type TODO = any;
 
 // In the absence of a WeakSet or WeakMap implementation, don't break, but don't cache either.
 function noop(...args: Array<any>) { }
-function createWeakMap<K extends object, V>(): WeakMap<K, V> {
+function createWeakMap<K extends object, V>(): MyWeakMap<K, V> {
     if(typeof WeakMap !== 'undefined') {
         return new WeakMap<K, V>();
     } else {
@@ -10,10 +10,13 @@ function createWeakMap<K extends object, V>(): WeakMap<K, V> {
     }
 }
 
+type MyWeakMap<K extends object, V> = Pick<WeakMap<K, V>, 'delete' | 'get' | 'set' | 'has'>;
+type MyWeakSetMap<K extends object, V> = Pick<WeakMap<K, V>, 'delete' | 'get' | 'set' | 'has'> & Pick<WeakSet<K>, 'add'>;
+
 /**
  * Creates and returns a no-op implementation of a WeakMap / WeakSet that never stores anything.
  */
-function fakeSetOrMap<K extends object, V = any>(): WeakMap<K, V> & WeakSet<K> {
+function fakeSetOrMap<K extends object, V = any>(): MyWeakSetMap<K, V> {
     return {
         add: noop as WeakSet<K>['add'],
         delete: noop as WeakMap<K, V>['delete'],

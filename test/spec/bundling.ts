@@ -11,14 +11,16 @@ describe('Code bundlers', () => {
                     context: Path.join(__dirname, '../fixture/webpack-project'),
                     entry: './entry',
                     output: {
-                        library: 'commonjs2',
+                        libraryTarget: 'commonjs',
                         path: Path.join(__dirname, '../fixture/webpack-project'),
                     },
                     mode: 'development',
                     devtool: false,
                     target: 'node',
                     resolve: {
-                        alias: { outdent: Path.join(__dirname, '..', '..') }
+                        alias: {
+                            outdent: Path.join(__dirname, '..', '..'),
+                        },
                     },
                 }, (err, stats) => {
                     if (err || stats.hasErrors() || stats.hasWarnings()) {
