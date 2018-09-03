@@ -6,6 +6,7 @@
         "module": "esnext",
         "outDir": "lib-module",
         // Skip declaration emit; it's redundant here.
-        "declaration": false
+        "declaration": false,
+        "declarationMap": false,
     }
 }
