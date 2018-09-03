@@ -36,6 +36,8 @@
         // Can enable once there is an automatic fixer for this rule.
         // Currently VSCode writes all the import statements for me, so I don't really care what they look like.
         // By default it puts wildcard and named imports on separate lines, which fails this linter.
-        "no-duplicate-imports": false
+        "no-duplicate-imports": false,
+
+        "object-literal-sort-keys": false
     }
 }
