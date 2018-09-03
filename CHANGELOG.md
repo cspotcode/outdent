@@ -1,3 +1,9 @@
+## v0.6.0
+
+* Adds missing tsconfig files to npm packages.  These will be picked up if / when someone steps their debugger into `outdent`'s source.
+* Enable declarationMap: "Go to declaration" should jump to the appropriate source code location.
+* Fixes webpack bundling support.
+
 ## 0.5.0
 
 * Adds `string` method for removing indentation from plain strings (thanks @treshugart [#8](https://github.com/cspotcode/outdent/pull/8))
