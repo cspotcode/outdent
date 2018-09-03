@@ -59,7 +59,9 @@
     "src",
     "LICENSE",
     "README.md",
+    "tsconfig-lib.json",
     "tsconfig-module.json",
+    "tsconfig-test.json",
     "tsconfig.json"
   ],
   "dependencies": {}
