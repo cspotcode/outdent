@@ -15,6 +15,9 @@
         "charset": "utf8",
         "lib": ["es5", "es2015.collection"],
 
+        // Module resolution and types
+        "moduleResolution": "node",
+
         "plugins": [
             {"name": "tslint-language-service"}
         ]
