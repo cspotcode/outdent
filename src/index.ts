@@ -169,17 +169,22 @@ export interface Options {
 }
 
 // Named exports.  Simple and preferred.
+// import outdent from 'outdent';
 export default outdent;
+// import {outdent} from 'outdent';
 export { outdent };
 
 // In CommonJS environments, enable `var outdent = require('outdent');` by
 // replacing the exports object.
 // Make sure that our replacement includes the named exports from above.
-declare var module: any, exports: any;
+declare var module: any;
 if(typeof module !== 'undefined') {
-    module.exports = exports = outdent;
-    // TODO is this necessary?
-    Object.defineProperty(outdent, '__esModule', { value: true });
-    (outdent as any).default = outdent;
-    (outdent as any).outdent = outdent;
+    // In webpack harmony-modules environments, module.exports is read-only,
+    // so we fail gracefully.
+    try {
+        module.exports = outdent;
+        Object.defineProperty(outdent, '__esModule', { value: true });
+        (outdent as any).default = outdent;
+        (outdent as any).outdent = outdent;
+    } catch(e) {}
 }
