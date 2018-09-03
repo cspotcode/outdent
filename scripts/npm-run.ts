@@ -49,7 +49,7 @@ const runners = {
         const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
         pkg.scripts = {};
         allScripts.forEach(script => {
-            pkg.scripts[script] = 'ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts';
+            pkg.scripts[script] = 'ts-node -T -P ./scripts/tsconfig.json ./scripts/npm-run.ts';
         });
         fs.writeFileSync('package.json', JSON.stringify(pkg, null, '  '));
     },

@@ -7,13 +7,13 @@
   "module": "lib-module/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "clean": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
-    "build": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
-    "test": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
-    "lint": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
-    "format": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
-    "prepack": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
-    "setup": "ts-node -F -P ./scripts/tsconfig.json ./scripts/npm-run.ts"
+    "clean": "ts-node -T -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "build": "ts-node -T -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "test": "ts-node -T -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "lint": "ts-node -T -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "format": "ts-node -T -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "prepack": "ts-node -T -P ./scripts/tsconfig.json ./scripts/npm-run.ts",
+    "setup": "ts-node -T -P ./scripts/tsconfig.json ./scripts/npm-run.ts"
   },
   "repository": {
     "type": "git",
