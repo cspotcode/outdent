@@ -141,7 +141,7 @@ removed
     it('Does not trim leading newline when asked not to', () => {
         expect(outdent({
             trimLeadingNewline: false,
-        }) `
+        })`
             Hello
             World
         `).to.equal('\nHello\nWorld');
@@ -149,7 +149,7 @@ removed
     it('Does not trim trailing newline when asked not to', () => {
         expect(outdent({
             trimTrailingNewline: false,
-        }) `
+        })`
             Hello
             World
         `).to.equal('Hello\nWorld\n');
@@ -159,7 +159,7 @@ removed
         expect(outdent({
             trimLeadingNewline: false,
             trimTrailingNewline: false,
-        }) `
+        })`
             Hello
             World
         `).to.equal('\nHello\nWorld\n');
@@ -167,13 +167,13 @@ removed
         expect(outdent({
             trimLeadingNewline: false,
             trimTrailingNewline: false,
-        }) `
+        })`
         `).to.equal('\n');
 
         expect(outdent({
             trimLeadingNewline: false,
             trimTrailingNewline: false,
-        }) `
+        })`
         
         `).to.equal('\n\n');
     });
@@ -184,7 +184,7 @@ removed
         
         `).to.equal('\n\n');
 
-        expect(customOutdent({ trimLeadingNewline: true }) `
+        expect(customOutdent({ trimLeadingNewline: true })`
             Hi
         `).to.equal('Hi\n');
     });

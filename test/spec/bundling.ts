@@ -23,7 +23,7 @@ describe('Code bundlers', () => {
                         },
                     },
                 }, (err, stats) => {
-                    if (err || stats.hasErrors() || stats.hasWarnings()) {
+                    if(err || stats.hasErrors() || stats.hasWarnings()) {
                         const info = stats.toJson();
                         rej(err || new Error(JSON.stringify(info.errors.length ? info.errors : info.warnings)));
                     } else {

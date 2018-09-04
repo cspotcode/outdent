@@ -189,5 +189,5 @@ if(typeof module !== 'undefined') {
         Object.defineProperty(outdent, '__esModule', { value: true });
         (outdent as any).default = outdent;
         (outdent as any).outdent = outdent;
-    } catch(e) {}
+    } catch(e) { }
 }
