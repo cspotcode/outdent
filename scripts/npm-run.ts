@@ -34,7 +34,7 @@ const runners = {
     },
     async format() {
         // Pass globs directly to tslint, avoiding shell expansion.
-        exec`tsfmt --replace src/**/*.ts test/**/*.ts`;
+        exec`tsfmt --baseDir . --useTsconfig ./tsconfig-test.json --replace`;
     },
     async prepack() {
         /*
