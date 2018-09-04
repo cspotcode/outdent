@@ -238,7 +238,7 @@ removed
         ['alternative strings instead of', ' -> ', 'Win -> Linux -> Mac -> .'],
     ].forEach(([type, newline, result]) => {
         it(`Normalizes to ${ type } newlines`, () => {
-            expect(outdent({newline})(funkyNewlines)).to.equal(result);
+            expect(outdent({ newline })(funkyNewlines)).to.equal(result);
         });
     });
 });

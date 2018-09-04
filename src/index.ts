@@ -66,7 +66,7 @@ function _outdentArray(strings: ReadonlyArray<string>, firstInterpolatedValueSet
         strings = strings.slice(1);
     }
 
-    const {newline, trimLeadingNewline, trimTrailingNewline} = options;
+    const { newline, trimLeadingNewline, trimTrailingNewline } = options;
     const normalizeNewlines = typeof newline === 'string';
     const l = strings.length;
     const outdentedStrings = strings.map((v, i) => {
