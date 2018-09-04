@@ -126,6 +126,52 @@ s = outdent({trimLeadingNewline: false, trimTrailingNewline: false})`
 assert(s === '\n\n');
 ```
 
+#### `newline`
+*Default: null*
+
+If set to a string, normalize all newlines in the template literal to this value.
+
+If `null`, newlines are left untouched.
+
+For example, in the absence of a `.gitattributes` file, source code
+checked out on Windows will have '\r\n' newlines.  This affects
+template literals as well.  The following example would produce
+different results on Windows and Linux, but can be normalized via
+`newline`:
+
+```
+s = outdent `
+    first
+    second
+`;
+
+assert(s === 'first\r\nsecond'); // Only true for git checkout on Windows
+assert(s === 'first\nsecond'); // Only true for git checkout on Linux
+
+s = outdent({newline: '\n'}) `
+    first
+    second
+`;
+
+assert(s === 'first\nsecond'); // Always true on any platform
+```
+
+Newlines that get normalized are '\r\n', '\r', and '\n'.
+
+Newlines within interpolated values are *never* normalized.
+
+Although intended for normalizing to '\n' or '\r\n',
+you can use any string, for example a space.
+
+```javascript
+const s = outdent({newline: ' '}) `
+    Hello
+    world!
+`;
+
+assert(s === 'Hello world!');
+```
+
 <!--
 #### `pass`
 

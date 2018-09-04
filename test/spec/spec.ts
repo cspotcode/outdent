@@ -224,4 +224,21 @@ removed
             `)
         ).to.equal('Hello world!\n  Hello world!');
     });
+
+    const funkyNewlines = makeStrings('\r Win\r\n Linux\n Mac\r .');
+
+    it('Preserves mixed newlines', () => {
+        expect(outdent(funkyNewlines)).to.equal('Win\r\nLinux\nMac\r.');
+    });
+
+    [
+        ['Unix', '\n', 'Win\nLinux\nMac\n.'],
+        ['Windows', '\r\n', 'Win\r\nLinux\r\nMac\r\n.'],
+        ['Mac', '\r', 'Win\rLinux\rMac\r.'],
+        ['alternative strings instead of', ' -> ', 'Win -> Linux -> Mac -> .'],
+    ].forEach(([type, newline, result]) => {
+        it(`Normalizes to ${ type } newlines`, () => {
+            expect(outdent({newline})(funkyNewlines)).to.equal(result);
+        });
+    });
 });

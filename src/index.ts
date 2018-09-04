@@ -46,48 +46,47 @@ function extend<T, S extends object>(target: T, source: S) {
 const reLeadingNewline = /^[ \t]*(?:\r\n|\r|\n)/;
 const reTrailingNewline = /(?:\r\n|\r|\n)[ \t]*$/;
 const reStartsWithNewlineOrIsEmpty = /^(?:[\r\n]|$)/;
-const reDetectIndentation = /(\r\n|\r|\n)([ \t]*)(?:[^ \t\r\n]|$)/;
+const reDetectIndentation = /(?:\r\n|\r|\n)([ \t]*)(?:[^ \t\r\n]|$)/;
 const reOnlyWhitespaceWithAtLeastOneNewline = /^[ \t]*[\r\n][ \t\r\n]*$/;
 
-function _outdent(strings: ReadonlyArray<string>, values: Array<any>, outdentInstance: Outdent, options: Options) {
+function _outdentArray(strings: ReadonlyArray<string>, firstInterpolatedValueSetsIndentationLevel: boolean, options: Options) {
     // If first interpolated value is a reference to outdent,
     // determine indentation level from the indentation of the interpolated value.
     let indentationLevel = 0;
 
     const match = strings[0].match(reDetectIndentation);
     if(match) {
-        indentationLevel = match[2].length;
+        indentationLevel = match[1].length;
     }
 
     const reSource = `(\\r\\n|\\r|\\n).{0,${ indentationLevel }}`;
     const reMatchIndent = new RegExp(reSource, 'g');
 
-    // Is first interpolated value a reference to outdent, alone on its own line, without any preceding non-whitespace?
-    if(
-        (values[0] === outdentInstance || values[0] === outdent) &&
-        reOnlyWhitespaceWithAtLeastOneNewline.test(strings[0]) &&
-        reStartsWithNewlineOrIsEmpty.test(strings[1])
-    ) {
-        values = values.slice(1);
+    if(firstInterpolatedValueSetsIndentationLevel) {
         strings = strings.slice(1);
     }
 
+    const {newline, trimLeadingNewline, trimTrailingNewline} = options;
+    const normalizeNewlines = typeof newline === 'string';
     const l = strings.length;
     const outdentedStrings = strings.map((v, i) => {
         // Remove leading indentation from all lines
         v = v.replace(reMatchIndent, '$1');
         // Trim a leading newline from the first string
-        if(i === 0 && options.trimLeadingNewline) {
+        if(i === 0 && trimLeadingNewline) {
             v = v.replace(reLeadingNewline, '');
         }
         // Trim a trailing newline from the last string
-        if(i === l - 1 && options.trimTrailingNewline) {
+        if(i === l - 1 && trimTrailingNewline) {
             v = v.replace(reTrailingNewline, '');
+        }
+        // Normalize newlines
+        if(normalizeNewlines) {
+            v = v.replace(/\r\n|\n|\r/g, (_) => newline as string);
         }
         return v;
     });
-
-    return concatStringsAndValues(outdentedStrings, values);
+    return outdentedStrings;
 }
 
 function concatStringsAndValues(strings: ReadonlyArray<string>, values: ReadonlyArray<any>): string {
@@ -112,7 +111,13 @@ function isTemplateStringsArray(v: any): v is TemplateStringsArray {
  * @return {outdent}
  */
 function createInstance(options: Options): Outdent {
-    const cache = createWeakMap<TemplateStringsArray, string>();
+    /** Cache of pre-processed template literal arrays */
+    const arrayAutoIndentCache = createWeakMap<TemplateStringsArray, Array<string>>();
+    /**
+     * Cache of pre-processed template literal arrays, where first interpolated value is a reference to outdent,
+     * before interpolated values are injected.
+     */
+    const arrayFirstInterpSetsIndentCache = createWeakMap<TemplateStringsArray, Array<string>>();
 
     /* tslint:disable:no-shadowed-variable */
     function outdent(stringsOrOptions: TemplateStringsArray, ...values: Array<any>): string;
@@ -120,16 +125,28 @@ function createInstance(options: Options): Outdent {
     function outdent(stringsOrOptions: TemplateStringsArray | Options, ...values: Array<any>): string | Outdent {
         /* tslint:enable:no-shadowed-variable */
         if(isTemplateStringsArray(stringsOrOptions)) {
-            // TODO Enable semi-caching, both when the first interpolated value is `outdent`, and when it's not
             const strings = stringsOrOptions;
-            // Serve from cache only if there are no interpolated values
-            if(values.length === 0 && cache.has(strings)) return cache.get(strings)!;
+
+            // Is first interpolated value a reference to outdent, alone on its own line, without any preceding non-whitespace?
+            const firstInterpolatedValueSetsIndentationLevel =
+                (values[0] === outdent || values[0] === defaultOutdent) &&
+                reOnlyWhitespaceWithAtLeastOneNewline.test(strings[0]) &&
+                reStartsWithNewlineOrIsEmpty.test(strings[1]);
 
             // Perform outdentation
-            const rendered = _outdent(strings, values, fullOutdent, options);
+            const cache = firstInterpolatedValueSetsIndentationLevel ? arrayFirstInterpSetsIndentCache : arrayAutoIndentCache;
+            let renderedArray = cache.get(strings);
+            if(!renderedArray) {
+                renderedArray = _outdentArray(strings, firstInterpolatedValueSetsIndentationLevel, options);
+                cache.set(strings, renderedArray);
+            }
+            /** If no interpolated values, skip concatenation step */
+            if(values.length === 0) {
+                return renderedArray[0];
+            }
+            /** Concatenate string literals with interpolated values */
+            const rendered = concatStringsAndValues(renderedArray, firstInterpolatedValueSetsIndentationLevel ? values.slice(1) : values);
 
-            // Store into the cache only if there are no interpolated values
-            values.length === 0 && cache.set(strings, rendered);
             return rendered;
         } else {
             // Create and return a new instance of outdent with the given options
@@ -139,14 +156,14 @@ function createInstance(options: Options): Outdent {
 
     const fullOutdent = extend(outdent, {
         string(str: string): string {
-            return _outdent([str], [], fullOutdent, options);
+            return _outdentArray([str], false, options)[0];
         },
     });
 
     return fullOutdent;
 }
 
-const outdent = createInstance({
+const defaultOutdent = createInstance({
     trimLeadingNewline: true,
     trimTrailingNewline: true,
 });
@@ -165,17 +182,36 @@ export interface Outdent {
      * Remove indentation from a string
      */
     string(str: string): string;
+
+    // /**
+    //  * Remove indentation from a template literal, but return a tuple of the
+    //  * outdented TemplateStringsArray and 
+    //  */
+    // pass(strings: TemplateStringsArray, ...values: Array<any>): [TemplateStringsArray, ...Array<any>];
 }
 export interface Options {
     trimLeadingNewline?: boolean;
     trimTrailingNewline?: boolean;
+    /**
+     * Normalize all newlines in the template literal to this value.
+     * 
+     * If `null`, newlines are left untouched.
+     * 
+     * Newlines that get normalized are '\r\n', '\r', and '\n'.
+     * 
+     * Newlines within interpolated values are *never* normalized.
+     * 
+     * Although intended for normalizing to '\n' or '\r\n',
+     * you can also set to any string; for example ' '.
+     */
+    newline?: string | null;
 }
 
 // Named exports.  Simple and preferred.
 // import outdent from 'outdent';
-export default outdent;
+export default defaultOutdent;
 // import {outdent} from 'outdent';
-export { outdent };
+export { defaultOutdent as outdent };
 
 // In CommonJS environments, enable `var outdent = require('outdent');` by
 // replacing the exports object.
@@ -185,9 +221,9 @@ if(typeof module !== 'undefined') {
     // In webpack harmony-modules environments, module.exports is read-only,
     // so we fail gracefully.
     try {
-        module.exports = outdent;
-        Object.defineProperty(outdent, '__esModule', { value: true });
-        (outdent as any).default = outdent;
-        (outdent as any).outdent = outdent;
+        module.exports = defaultOutdent;
+        Object.defineProperty(defaultOutdent, '__esModule', { value: true });
+        (defaultOutdent as any).default = defaultOutdent;
+        (defaultOutdent as any).outdent = defaultOutdent;
     } catch(e) { }
 }
