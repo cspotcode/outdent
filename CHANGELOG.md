@@ -1,3 +1,8 @@
+## v0.7.0
+
+* Improve internal caching.  outdent will avoid re-computing indentation removal in more situations.
+* Add `newline` option for normalizing newlines in template literals.
+
 ## v0.6.0
 
 * Adds missing tsconfig files to npm packages.  These will be picked up if / when someone steps their debugger into `outdent`'s source.
