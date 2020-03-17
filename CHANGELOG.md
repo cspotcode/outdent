@@ -1,3 +1,7 @@
+## UNRELEASED
+
+* Fix typo in README
+
 ## v0.7.0
 
 * Improve internal caching.  outdent will avoid re-computing indentation removal in more situations.
