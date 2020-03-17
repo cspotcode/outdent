@@ -1,4 +1,4 @@
-## UNRELEASED
+## v0.7.1
 
 * Fix typo in README
 
