@@ -126,7 +126,8 @@ removed
 
         expect(outdent(makeStrings(
             '\n' +
-            '    ', /* interpolated */ '   \n' +
+            '    ',
+            /* interpolated */ '   \n' +
             '    Hello world!\n' +
             '    '
         ), outdent)).to.equal(`${ toString }   \nHello world!`);
