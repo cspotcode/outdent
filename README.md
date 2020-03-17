@@ -57,7 +57,7 @@ As a JavaScript string:
 ```javascript
 var markdown = '# My Markdown File\n' +
                '\n' +
-               'Here is some indented code:' +
+               'Here is some indented code:\n' +
                '\n' +
                '    console.log("hello world!");';
 ```
