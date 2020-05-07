@@ -133,34 +133,20 @@ If set to a string, normalize all newlines in the template literal to this value
 
 If `null`, newlines are left untouched.
 
-For example, in the absence of a `.gitattributes` file, source code
-checked out on Windows will have '\r\n' newlines.  This affects
-template literals as well.  The following example would produce
-different results on Windows and Linux, but can be normalized via
-`newline`:
-
 ```
-s = outdent `
+s = outdent({newline: '\n\n'}) `
     first
     second
 `;
 
-assert(s === 'first\r\nsecond'); // Only true for git checkout on Windows
-assert(s === 'first\nsecond'); // Only true for git checkout on Linux
-
-s = outdent({newline: '\n'}) `
-    first
-    second
-`;
-
-assert(s === 'first\nsecond'); // Always true on any platform
+assert(s === 'first\r\nsecond');
 ```
 
 Newlines that get normalized are '\r\n', '\r', and '\n'.
 
 Newlines within interpolated values are *never* normalized.
 
-Although intended for normalizing to '\n' or '\r\n',
+Although intended for normalizing to '\r\n',
 you can use any string, for example a space.
 
 ```javascript
