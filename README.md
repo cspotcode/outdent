@@ -134,7 +134,7 @@ If set to a string, normalize all newlines in the template literal to this value
 If `null`, newlines are left untouched.
 
 ```
-s = outdent({newline: '\n\n'}) `
+s = outdent({newline: '\r\n'}) `
     first
     second
 `;
