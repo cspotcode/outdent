@@ -2,7 +2,8 @@
 
 ## Removes leading indentation from ES6 template strings
 
-[![Build Status](https://travis-ci.org/cspotcode/outdent.svg?branch=master)](https://travis-ci.org/cspotcode/outdent) [![typings included](https://img.shields.io/badge/typings-included-brightgreen.svg)](#typescript-declarations)
+[![BuildStatus](https://github.com/cspotcode/outdent/workflows/.github/workflows/test.yml/badge.svg)](https://github.com/cspotcode/outdent/actions?query=workflow%3A.github%2Fworkflows%2Ftest.yml)
+[![typings included](https://img.shields.io/badge/typings-included-brightgreen.svg)](#typescript-declarations)
 
 ES6 template strings are great, but they preserve everything between the backticks, including leading spaces.
 Sometimes I want to indent my template literals to make my code more readable without including all those spaces in the

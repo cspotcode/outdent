@@ -1,9 +1,11 @@
-push:
-  branches:
-    - main
-pull_request:
-  branches:
-    - main
+name: Tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
   test:
     name: Test
