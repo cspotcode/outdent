@@ -13,7 +13,13 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: npm ci
-        run: npm ci
-      - name: test
-        run: npm test
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .yarn/cache
+    key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: Fetch dependencies
+        run: yarn --immutable
+      - name: Test
+        run: yarn test

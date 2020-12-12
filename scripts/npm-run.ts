@@ -8,14 +8,13 @@ async function run(script: string) {
     `${Path.relative(process.cwd(), __filename)}: Running "${script}"`,
   );
   if (!allScripts.some((v) => v === script)) {
-    throw new Error(`Unexpected npm lifecycle event: ${script}`);
+    throw new Error(`Unexpected lifecycle event: ${script}`);
   }
   await runners[script]();
 }
 
 const runners = {
   async clean() {
-    fs.rmdirSync("node_modules");
     fs.rmdirSync("lib");
     fs.rmdirSync("lib-module");
     fs.rmdirSync("tsconfig-lib.tsbuildinfo");
@@ -44,8 +43,8 @@ const runners = {
      * Make extra-sure that we are producing a clean, valid package for publishing or otherwise.
      * Force a full clean, reinstall of deps, rebuild, and run tests.
      */
+    exec`yarn`;
     await run("clean");
-    exec`npm install`;
     await run("test");
   },
   async setup() {
