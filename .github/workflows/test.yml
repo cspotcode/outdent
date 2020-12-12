@@ -18,7 +18,7 @@ jobs:
         with:
           path: |
             .yarn/cache
-    key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
       - name: Fetch dependencies
         run: yarn --immutable
       - name: Test
