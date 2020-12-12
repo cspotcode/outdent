@@ -1,5 +1,5 @@
-import {outdent} from 'outdent';
+import { outdent } from "outdent";
 
-export default outdent `
+export default outdent`
     Webpack output
 `;
