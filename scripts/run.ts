@@ -17,8 +17,8 @@ const runners = {
   async clean() {
     fs.rmdirSync("lib", { recursive: true });
     fs.rmdirSync("lib-module", { recursive: true });
-    fs.rmdirSync("tsconfig-lib.tsbuildinfo");
-    fs.rmdirSync("tsconfig-module.tsbuildinfo");
+    fs.removeSync("tsconfig-lib.tsbuildinfo");
+    fs.removeSync("tsconfig-module.tsbuildinfo");
   },
   async build() {
     exec`tsc --build ./tsconfig-build.json`;
