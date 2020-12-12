@@ -53,14 +53,14 @@
     "which": "^1.3.0"
   },
   "files": [
-    "lib",
-    "lib-module",
-    "src",
-    "LICENSE",
-    "README.md",
-    "tsconfig-build.json",
-    "tsconfig-lib.json",
-    "tsconfig-module.json",
-    "tsconfig.json"
+    "/lib",
+    "/lib-module",
+    "/src",
+    "/LICENSE",
+    "/README.md",
+    "/tsconfig-build.json",
+    "/tsconfig-lib.json",
+    "/tsconfig-module.json",
+    "/tsconfig.json"
   ]
 }
