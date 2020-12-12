@@ -27,9 +27,7 @@ describe("Code bundlers", () => {
             const info = stats.toJson();
             rej(
               err || new Error(JSON.stringify(
-                info.errors.length
-                  ? info.errors
-                  : info.warnings,
+                info.errors.length ? info.errors : info.warnings,
               )),
             );
           } else {

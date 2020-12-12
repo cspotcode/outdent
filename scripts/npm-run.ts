@@ -30,7 +30,7 @@ const runners = {
     await run("lint");
   },
   formattedFiles:
-    `scripts src test --ignore test/fixture/webpack-project/main.js`.split(" "),
+    `scripts src test --ignore=test/fixture/webpack-project/main.js`.split(" "),
   async lint() {
     // Pass globs directly to tslint, avoiding shell expansion.
     exec`deno fmt --check ${this.formattedFiles}`;
@@ -114,7 +114,10 @@ function exec(strings: TemplateStringsArray, ...values: Array<string>): void {
           }
           prevTokType = "notWhitespace";
           if (cmd[cmdIndex] == null) cmd[cmdIndex] = "";
-          if (!first) ++cmdIndex;
+          if (!first) {
+            ++cmdIndex;
+            cmd[cmdIndex] = "";
+          }
           cmd[cmdIndex] += val;
           first = false;
         }
