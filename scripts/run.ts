@@ -15,8 +15,8 @@ async function run(script: string) {
 
 const runners = {
   async clean() {
-    fs.rmdirSync("lib");
-    fs.rmdirSync("lib-module");
+    fs.rmdirSync("lib", { recursive: true });
+    fs.rmdirSync("lib-module", { recursive: true });
     fs.rmdirSync("tsconfig-lib.tsbuildinfo");
     fs.rmdirSync("tsconfig-module.tsbuildinfo");
   },
