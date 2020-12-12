@@ -1,4 +1,0 @@
-// This determines the configuration used by your editor's tslint plugin
-{
-    "extends": "./tslint-test.json"
-}

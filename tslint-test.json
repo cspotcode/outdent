@@ -1,6 +1,0 @@
-{
-    "extends": "./tslint-lib.json",
-    "rules": {
-        "no-implicit-dependencies": [true, "dev"]
-    }
-}
