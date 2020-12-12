@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     name: Test
+    runs-on: Ubuntu-20.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
