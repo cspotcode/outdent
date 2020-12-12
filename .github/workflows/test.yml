@@ -1,0 +1,16 @@
+push:
+  branches:
+    - main
+pull_request:
+  branches:
+    - main
+jobs:
+  test:
+    name: Test
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: npm ci
+        run: npm ci
+      - name: test
+        run: npm test

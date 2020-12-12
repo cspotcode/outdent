@@ -1,7 +1,10 @@
-.idea
-.vscode
-node_modules
-npm-debug.log
-lib
-lib-module
-package-lock.json
+/.idea
+/.vscode
+/.yarn
+!/.yarn/releases
+/node_modules
+/npm-debug.log
+/lib
+/lib-module
+/package-lock.json
+/*.tsbuildinfo

@@ -1,7 +1,6 @@
-import * as fs from "fs";
-import * as rimraf from "rimraf";
-import * as child_process from "child_process";
-import * as which from "which";
+#!/usr/bin/env ts-node-script
+import * as fs from "fs-extra";
+import { sync as spawnSync } from "execa";
 import * as Path from "path";
 
 async function run(script: string) {
@@ -16,13 +15,14 @@ async function run(script: string) {
 
 const runners = {
   async clean() {
-    rimraf.sync("node_modules");
-    rimraf.sync("lib");
-    rimraf.sync("lib-module");
+    fs.rmdirSync("node_modules");
+    fs.rmdirSync("lib");
+    fs.rmdirSync("lib-module");
+    fs.rmdirSync("tsconfig-lib.tsbuildinfo");
+    fs.rmdirSync("tsconfig-module.tsbuildinfo");
   },
   async build() {
-    exec`tsc --project ./tsconfig-lib.json`;
-    exec`tsc --project ./tsconfig-module.json`;
+    exec`tsc --build ./tsconfig-build.json`;
   },
   async test() {
     await run("build");
@@ -30,22 +30,20 @@ const runners = {
     exec`tsc --project test/ts`;
     await run("lint");
   },
+  formattedFiles:
+    `scripts src test --ignore test/fixture/webpack-project/main.js`.split(" "),
   async lint() {
     // Pass globs directly to tslint, avoiding shell expansion.
-    exec`tslint --config ./tslint-lib.json --project ./tsconfig-lib.json `;
-    exec
-      `tslint --config ./tslint-test.json --project ./tsconfig-test.json --exclude src/**/*`;
-    exec`tsfmt --baseDir . --useTsconfig ./tsconfig-test.json --verify`;
+    exec`deno fmt --check ${this.formattedFiles}`;
   },
   async format() {
-    // Pass globs directly to tslint, avoiding shell expansion.
-    exec`tsfmt --baseDir . --useTsconfig ./tsconfig-test.json --replace`;
+    exec`deno fmt ${this.formattedFiles}`;
   },
   async prepack() {
     /*
-            * Make extra-sure that we are producing a clean, valid package for publishing or otherwise.
-            * Force a full clean, reinstall of deps, rebuild, and run tests.
-            */
+     * Make extra-sure that we are producing a clean, valid package for publishing or otherwise.
+     * Force a full clean, reinstall of deps, rebuild, and run tests.
+     */
     await run("clean");
     exec`npm install`;
     await run("test");
@@ -54,8 +52,7 @@ const runners = {
     const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
     pkg.scripts = {};
     allScripts.forEach((script) => {
-      pkg.scripts[script] =
-        "ts-node -T -P ./scripts/tsconfig.json ./scripts/npm-run.ts";
+      pkg.scripts[script] = "ts-node-script ./scripts/npm-run.ts";
     });
     fs.writeFileSync("package.json", JSON.stringify(pkg, null, "  "));
   },
@@ -109,13 +106,19 @@ function exec(strings: TemplateStringsArray, ...values: Array<string>): void {
         prevTokType = "whitespace";
         ++cmdIndex;
       } else {
-        // Pretend that 'null', 'undefined', and 'false' interpolations don't exist
-        if (tok.type === "interp") {
-          if (tok.val == null || tok.val === false) continue;
+        const vals = Array.isArray(tok.val) ? tok.val : [tok.val];
+        let first = true;
+        for (const val of vals) {
+          // Pretend that 'null', 'undefined', and 'false' interpolations don't exist
+          if (tok.type === "interp") {
+            if (val == null || val === false) continue;
+          }
+          prevTokType = "notWhitespace";
+          if (cmd[cmdIndex] == null) cmd[cmdIndex] = "";
+          if (!first) ++cmdIndex;
+          cmd[cmdIndex] += val;
+          first = false;
         }
-        prevTokType = "notWhitespace";
-        if (cmd[cmdIndex] == null) cmd[cmdIndex] = "";
-        cmd[cmdIndex] += tok.val;
       }
     }
     console.log(`> ${cmd.join(" ")}`);
@@ -124,13 +127,13 @@ function exec(strings: TemplateStringsArray, ...values: Array<string>): void {
       const [, name, value] = cmd.shift()!.match(/^([\s\S]*?)=(.*)$/)!;
       env[name] = value;
     }
-    const executable = which.sync(cmd[0]);
+    const executable = cmd[0];
     const args = cmd.slice(1);
-    const result = child_process.spawnSync(executable, args, {
+    const result = spawnSync(executable, args, {
       stdio: "inherit",
       env: { ...process.env, ...env },
     });
-    if (result.status !== 0) {
+    if (result.exitCode !== 0) {
       throw new Error("Process returned non-zero exit status.");
     }
   }

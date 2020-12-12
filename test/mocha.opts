@@ -1,2 +1,2 @@
---require test/require-first.js
+--require ts-node/register
 ./test/spec/**/*.{js,ts}

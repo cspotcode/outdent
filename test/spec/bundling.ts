@@ -6,7 +6,7 @@ import outdent from "../..";
 describe("Code bundlers", () => {
   describe("Webpack", () => {
     it("bundles outdent", async () => {
-      await new Promise((res, rej) => {
+      await new Promise<void>((res, rej) => {
         webpack({
           context: Path.join(__dirname, "../fixture/webpack-project"),
           entry: "./entry",
