@@ -11,6 +11,9 @@ jobs:
     name: Test
     runs-on: Ubuntu-20.04
     steps:
+      - uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.6
       - name: Check out repository
         uses: actions/checkout@v2
       - name: Cache
