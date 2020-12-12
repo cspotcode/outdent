@@ -15,19 +15,16 @@ Outdent will remove those leading spaces, as well as the leading and trailing ne
 
 Import **outdent** using your module system of choice.
 
-CommonJS:
-```javascript
-const outdent = require('outdent');
-```
-
-ES6 Modules & TypeScript:
-```javascript
+```typescript
+// ECMAScript modules
 import outdent from 'outdent';
+// or CommonJS
+const outdent = require('outdent');
 ```
 
 #### Examples
 
-```javascript
+```typescript
 import outdent from 'outdent';
 
 const markdown = outdent`
@@ -55,7 +52,7 @@ Here is some indented code:
 
 As a JavaScript string:
 
-```javascript
+```typescript
 var markdown = '# My Markdown File\n' +
                '\n' +
                'Here is some indented code:\n' +
@@ -65,7 +62,7 @@ var markdown = '# My Markdown File\n' +
 
 You can pass options to **outdent** to control its behavior. They are explained in [Options](#options).
 
-```javascript
+```typescript
 const output = outdent({trimLeadingNewline: false, trimTrailingNewline: false})`
     Hello world!
 `;
@@ -75,7 +72,7 @@ assert(output === '\nHello world!\n');
 
 You can explicitly specify the indentation level by passing `outdent` as the first interpolated value. Its position sets the indentation level and it is removed from the output:
 
-```javascript
+```typescript
 const output = outdent`
       ${outdent}
         Yo
@@ -91,7 +88,7 @@ assert(output === '  Yo\n345\n    Hello world');
 
 Outdent can also remove indentation from plain strings via the `string` method.
 
-```javascript
+```typescript
 const output = outdent.string('\n    Hello world!\n');
 
 assert(output === 'Hello world!');
@@ -107,7 +104,7 @@ assert(output === 'Hello world!');
 
 Whether or not outdent should remove the leading and/or trailing newline from your template string.  For example:
 
-```javascript
+```typescript
 var s = outdent({trimLeadingNewline: false})`
     Hello
 `;
@@ -150,7 +147,7 @@ Newlines within interpolated values are *never* normalized.
 Although intended for normalizing to '\r\n',
 you can use any string, for example a space.
 
-```javascript
+```typescript
 const s = outdent({newline: ' '}) `
     Hello
     world!
@@ -166,7 +163,7 @@ Returns an arguments array that can be passed to another tagging function, inste
 
 For example, say you want to use outdent with the following code:
 
-```javascript
+```typescript
 function query(barVal) {
     return prepareSql`
 SELECT * from foo where bar = ${barVal}
@@ -178,7 +175,7 @@ SELECT * from foo where bar = ${barVal}
 query.  To add outdent into the mix, we
 must set `pass: true` and splat the result into `prepareSql`.
 
-```javascript
+```typescript
 var odRaw = outdent({pass: true});
 function query(barVal) {
     return prepareSql(...odRaw`
@@ -200,7 +197,7 @@ template strings? Regardless, the `pass` option is here in case you need it. :-)
 Start the contents of your template string on a new line *after* the opening backtick.  Otherwise, outdent
 has no choice but to detect indentation from the *second* line, which does not work in all situations.
 
-```javascript
+```typescript
 // Bad
 const output = outdent `* item 1
                           * sub-item
