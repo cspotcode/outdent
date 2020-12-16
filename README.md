@@ -16,9 +16,11 @@ Outdent will remove those leading spaces, as well as the leading and trailing ne
 Import **outdent** using your module system of choice.
 
 ```typescript
+// Deno
+import outdent from 'http://deno.land/x/outdent/mod.ts';
 // ECMAScript modules
 import outdent from 'outdent';
-// or CommonJS
+// CommonJS
 const outdent = require('outdent');
 ```
 

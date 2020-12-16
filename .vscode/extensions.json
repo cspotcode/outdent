@@ -1,6 +1,7 @@
 {
-    "recommendations": [
-        "denoland.vscode-deno",
-        "EditorConfig.EditorConfig"
-    ]
+  "recommendations": [
+    "denoland.vscode-deno",
+    "EditorConfig.EditorConfig",
+    "arcanis.vscode-zipfs"
+  ]
 }

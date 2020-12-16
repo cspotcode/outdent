@@ -1,10 +1,18 @@
 {
-  "editor.formatOnSave": true,
-  "editor.formatOnSaveMode": "file",
   "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
     "editor.defaultFormatter": "denoland.vscode-deno"
-  }
+  },
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

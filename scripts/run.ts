@@ -22,6 +22,8 @@ const runners = {
   },
   async build() {
     exec`tsc --build ./tsconfig-build.json`;
+    fs.removeSync("lib-module/index.d.ts");
+    fs.removeSync("lib-module/index.d.ts.map");
   },
   async test() {
     await run("build");
