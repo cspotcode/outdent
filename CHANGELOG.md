@@ -1,3 +1,8 @@
+## v0.7.2
+
+* Update README
+* Publish to [deno.land/x](https://deno.land/x/outdent)
+
 ## v0.7.1
 
 * Fix typo in README
