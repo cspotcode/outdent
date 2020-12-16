@@ -1,4 +1,4 @@
-import outdent from "../mod.ts";
+import outdent from "http://deno.land/x/outdent/mod.ts";
 
 console.log(outdent`
   Hello
