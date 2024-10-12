@@ -32,7 +32,7 @@ const runners = {
     await run("lint");
   },
   formattedFiles:
-    `scripts src test --ignore=test/fixture/webpack-project/main.js`.split(" "),
+    `test scripts src --ignore=test/fixture/webpack-project/main.js`.split(" "),
   async lint() {
     // Pass globs directly to tslint, avoiding shell expansion.
     exec`deno fmt --check ${this.formattedFiles}`;
