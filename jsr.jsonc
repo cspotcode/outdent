@@ -1,0 +1,5 @@
+{
+  "name": "@cspotcode/outdent",
+  "version": "0.8.0",
+  "exports": "./src/index.ts"
+}
