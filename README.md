@@ -17,7 +17,7 @@ Import **outdent** using your module system of choice.
 
 ```typescript
 // Deno w/JSR
-import outdent from 'jsr:outdent';
+import outdent from 'jsr:@cspotcode/outdent';
 // Deno w/DenoLand
 import outdent from 'https://deno.land/x/outdent/mod.ts';
 // ECMAScript modules
